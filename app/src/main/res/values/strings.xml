@@ -1,0 +1,41 @@
+<resources>
+    <string name="intro_1_header">Welcome to Med-Manager</string>
+    <string name="intro_2_header">Medication Reminder</string>
+    <string name="intro_3_header">Doctor\'s Appointment</string>
+
+    <string name="app_name">Med-Manager</string>
+    <string name="home">Home</string>
+    <string name="section1">Reminders</string>
+    <string name="section2">Medications</string>
+    <string name="about">About</string>
+    <string name="exit">Exit</string>
+
+    <string name="ok">Okay</string>
+    <string name="tips">How it works</string>
+    <string name="instruction">How it works</string>
+
+
+    <string name="meds">Medication</string>
+    <string name="doc_app">Doctor\'s Appointment</string>
+    <string name="list_meds">List of Meds</string>
+    <string name="doc">Doctor Info</string>
+    <string name="profile">Profile</string>
+    <string name="section3">Others</string>
+
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
+    <string name="shared_pref">MED</string>
+
+
+    <string name="remove_item">Remove</string>
+    <string name="app_intro_skip">Welcome</string>
+    <string name="intro_text_1">An awesome android app the helps you manage your meds intake and improves your health</string>
+    <string name="intro_text_2">Reminds you to take your medication</string>
+    <string name="intro_text_3">Never miss an appointment with the Doctor</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
