@@ -35,7 +35,6 @@ import android.widget.TextView;
 import project.alc.com.med_manager.medication.Doctor;
 import project.alc.com.med_manager.medication.Medications;
 import project.alc.com.med_manager.others.About;
-import project.alc.com.med_manager.others.Exit;
 import project.alc.com.med_manager.others.Profile;
 import project.alc.com.med_manager.reminder.Appointment;
 import project.alc.com.med_manager.reminder.Medication;
@@ -297,16 +296,17 @@ public class HomeActivityTest extends AppCompatActivity implements SharedPrefere
 
                 break;
             case R.id.exit:
-                fragmentClass = Exit.class;
-                curentCurrency.setImageResource(R.drawable.ic_home_black_24dp);
-                currentTextView.setText("");
-             //   Glide.with(this).load(R.drawable.background_img).into(img_cover);
-                base_spinner.setVisibility(View.GONE);
-                btn_Add.setVisibility(View.GONE);
-                radio_btc.setVisibility(View.GONE);
-                radio_eth.setVisibility(View.GONE);
-                //recyclerView.setVisibility(View.GONE);
-                //     Glide.with(this).onDestroy();
+                finishAffinity();
+                fragmentClass = Appointment.class;
+//                curentCurrency.setImageResource(R.drawable.ic_home_black_24dp);
+//                currentTextView.setText("");
+//             //   Glide.with(this).load(R.drawable.background_img).into(img_cover);
+//                base_spinner.setVisibility(View.GONE);
+//                btn_Add.setVisibility(View.GONE);
+//                radio_btc.setVisibility(View.GONE);
+//                radio_eth.setVisibility(View.GONE);
+//                //recyclerView.setVisibility(View.GONE);
+//                //     Glide.with(this).onDestroy();
 
 //
 //                //mainLay.setBackground(getDrawable(this, R.drawable.background_img));

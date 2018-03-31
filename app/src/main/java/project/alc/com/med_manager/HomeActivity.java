@@ -8,11 +8,12 @@ import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -20,16 +21,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -37,7 +34,6 @@ import android.widget.TextView;
 import project.alc.com.med_manager.medication.Doctor;
 import project.alc.com.med_manager.medication.Medications;
 import project.alc.com.med_manager.others.About;
-import project.alc.com.med_manager.others.Exit;
 import project.alc.com.med_manager.others.Profile;
 import project.alc.com.med_manager.reminder.Appointment;
 import project.alc.com.med_manager.reminder.Medication;
@@ -47,6 +43,7 @@ public class HomeActivity extends AppCompatActivity implements SharedPreferences
     private ActionBarDrawerToggle mToggle;
     private ImageView curentCurrency;
     private TextView currentTextView;
+    public boolean isFirstStart;
     //  private SharedPreferences mSharedPreferences;
 
 
@@ -97,8 +94,33 @@ public class HomeActivity extends AppCompatActivity implements SharedPreferences
         setContentView(R.layout.activity_home);
         if (savedInstanceState != null) {
             //Restore the fragment's instance
-//            myFragment = getSupportFragmentManager().getFragment(savedInstanceState, myFragment.toString());
+            //       myFragment = getSupportFragmentManager().getFragment(savedInstanceState, myFragment.toString());
         }
+
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //  Intro App Initialize SharedPreferences
+                SharedPreferences getSharedPreferences = PreferenceManager
+                        .getDefaultSharedPreferences(getBaseContext());
+
+                //  Create a new boolean and preference and set it to true
+                isFirstStart = getSharedPreferences.getBoolean("firstStart", true);
+
+                //  Check either activity or app is open very first time or not and do action
+                if (isFirstStart) {
+
+                    //  Launch application introduction screen
+                    Intent i = new Intent(HomeActivity.this, MyIntro.class);
+                    startActivity(i);
+                    SharedPreferences.Editor e = getSharedPreferences.edit();
+                    e.putBoolean("firstStart", false);
+                    e.apply();
+                }
+            }
+        });
+        t.start();
+
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nv);
@@ -144,8 +166,43 @@ public class HomeActivity extends AppCompatActivity implements SharedPreferences
         super.onSaveInstanceState(outState);
 
         //Save the fragment's instance
-        final Fragment fragmentInFrame = getSupportFragmentManager().findFragmentById(R.id.flcontent);
-        getSupportFragmentManager().putFragment(outState, fragmentInFrame.getTag(), fragmentInFrame);
+//        savedInstanceState.putString("fragClassName", fragmentClass.toString());
+//        final Fragment fragmentInFrame = getSupportFragmentManager().findFragmentById(R.id.flcontent);
+//        getSupportFragmentManager().putFragment(outState, fragmentInFrame.getTag(), myFragment);
+////        getSupportFragmentManager().putFragment(outState, "myFragmentName", myFragment);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+// When orientation is changed, activity goes through onResume()
+        try {
+            myFragment = (Fragment) fragmentClass.newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+//        String fragClassName = savedInstanceState.getString("fragClassName", "Home");
+//        try {
+//            Class frag = Class.forName(fragClassName);
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            myFragment = (Fragment) frag.newInstance();
+//        } catch (InstantiationException e) {
+//            e.printStackTrace();
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        }
+
     }
 
     private void setUpDrawerContent(NavigationView navigationView) {
@@ -208,9 +265,10 @@ public class HomeActivity extends AppCompatActivity implements SharedPreferences
                 currentTextView.setText("");
                 break;
             case R.id.exit:
-                fragmentClass = Exit.class;
-                curentCurrency.setImageResource(R.drawable.ic_home_black_24dp);
-                currentTextView.setText("");
+                finishAffinity();
+//                fragmentClass = Exit.class;
+//                curentCurrency.setImageResource(R.drawable.ic_home_black_24dp);
+//                currentTextView.setText("");
                 break;
             default:
                 fragmentClass = HomeActivity.class;

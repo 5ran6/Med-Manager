@@ -3,11 +3,13 @@ package project.alc.com.med_manager;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.SharedPreferencesCompat;
 import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
@@ -22,7 +24,6 @@ public class MyIntro extends AppIntro {
     // DID NOT override onCreate. Used init
     @Override
     public void init(Bundle savedInstanceState) {
-
         if (ContextCompat.checkSelfPermission(MyIntro.this, Manifest.permission.VIBRATE) == PackageManager.PERMISSION_GRANTED) {
 //            Toast.makeText(this, "Permission GRANTED", Toast.LENGTH_SHORT).show();
 
@@ -47,6 +48,7 @@ public class MyIntro extends AppIntro {
         //Add animation to the intro slider
         setDepthAnimation();
     }
+
 
     private void requestVibrationPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.VIBRATE)) {
@@ -83,11 +85,9 @@ public class MyIntro extends AppIntro {
     @Override
     public void onSkipPressed() {
         // Do something here when users click or tap on Skip button.
-        Toast.makeText(getApplicationContext(),
-                getString(R.string.app_intro_skip), Toast.LENGTH_SHORT).show();
+
         finish();
-        Intent i = new Intent(getApplicationContext(), HomeActivity.class);
-        startActivity(i);
+
     }
 
     @Override
@@ -98,11 +98,7 @@ public class MyIntro extends AppIntro {
     @Override
     public void onDonePressed() {
         // Do something here when users click or tap tap on Done button.
-        Toast.makeText(getApplicationContext(),
-                getString(R.string.app_intro_skip), Toast.LENGTH_SHORT).show();
         finish();
-        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-        startActivity(intent);
     }
 
     @Override

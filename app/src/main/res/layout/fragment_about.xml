@@ -2,15 +2,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:orientation="vertical"
     tools:context="project.alc.com.med_manager.others.About">
 
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:src="@drawable/doctor" />
+
     <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:textSize="30dp"
+        android:textStyle="italic"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="About" />
+        android:text="@string/about_app" />
 
 
 </LinearLayout>
