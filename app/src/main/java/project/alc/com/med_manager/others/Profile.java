@@ -30,6 +30,7 @@ import com.google.android.gms.common.api.Status;
 
 import org.w3c.dom.Text;
 
+import project.alc.com.med_manager.HomeActivity;
 import project.alc.com.med_manager.R;
 
 /**
@@ -43,7 +44,7 @@ import project.alc.com.med_manager.R;
 public class Profile extends Fragment implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
     private ProgressDialog progressDialog;
     private LinearLayout profile_section;
-    private Button SignOut;
+    private Button SignOut, done;
     private SignInButton SignIn;
     private TextView name, email;
     private ImageView passport;
@@ -105,7 +106,9 @@ public class Profile extends Fragment implements View.OnClickListener, GoogleApi
         email = (TextView) view.findViewById(R.id.email);
         SignIn = (SignInButton) view.findViewById(R.id.sign_in_button);
         SignOut = (Button) view.findViewById(R.id.sign_out_button);
+        done = (Button) view.findViewById(R.id.done);
         passport = (ImageView) view.findViewById(R.id.profile_pic);
+        done.setOnClickListener(this);
         SignIn.setOnClickListener(this);
         SignOut.setOnClickListener(this);
         GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
@@ -184,6 +187,11 @@ public class Profile extends Fragment implements View.OnClickListener, GoogleApi
                 break;
             case R.id.sign_out_button:
                 signOut();
+                break;
+            case R.id.done:
+                Intent i = new Intent(getContext(), HomeActivity.class);
+                startActivity(i);
+                getActivity().finish();
                 break;
         }
     }

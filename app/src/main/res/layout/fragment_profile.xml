@@ -49,13 +49,25 @@
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:background="@drawable/custom_btn_orange"
                 android:gravity="center"
-                android:text="LOGOUT GOOGLE ACCOUNT" />
+                android:text="LOGOUT GOOGLE ACCOUNT"
+                android:textColor="@color/White"
+                android:textStyle="italic" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="40dp" />
 
+            <Button
+                android:id="@+id/done"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/custom_btn_green_pearl"
+                android:text="Done"
+                android:textColor="@color/White"
+                android:textStyle="italic" />
 
         </LinearLayout>
 
