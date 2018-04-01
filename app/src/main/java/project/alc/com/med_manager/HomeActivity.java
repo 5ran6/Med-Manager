@@ -47,18 +47,9 @@ public class HomeActivity extends AppCompatActivity implements SharedPreferences
     //  private SharedPreferences mSharedPreferences;
 
 
-    RelativeLayout mainLay;
-    Button btn_Add;
-    ImageView img_cover;
     FrameLayout frameLayout;
-    //RadioButton radio_btc, radio_eth;
     SharedPreferences sharedPref = null;
     SharedPreferences.Editor editor = null;
-    Spinner base_spinner;
-    private LinearLayout mLWelcome;
-    private int animDuration = 200;
-    private float sD;
-    Resources res;
     Class fragmentClass = Home.class;
     Fragment myFragment = (Fragment) fragmentClass.newInstance();
 

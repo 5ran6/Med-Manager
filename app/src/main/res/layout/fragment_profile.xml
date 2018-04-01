@@ -4,16 +4,69 @@
     android:layout_height="match_parent"
     tools:context="project.alc.com.med_manager.others.Profile">
 
-
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
+        android:id="@+id/profile_section"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Profile"
-        android:gravity="center"
-        />
+        android:layout_height="wrap_content"
 
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="50dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/profile_pic"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/doctor" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <!-- TODO: Update blank fragment layout -->
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingBottom="10dp"
+                android:text="Name"
+                android:textSize="25dp"
+                android:textStyle="bold" />
+            <!-- TODO: Update blank fragment layout -->
+            <TextView
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingBottom="10dp"
+                android:text="Email"
+                android:textSize="30dp"
+                android:textStyle="italic" />
+
+            <Button
+                android:id="@+id/sign_out_button"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="LOGOUT GOOGLE ACCOUNT" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="40dp" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/sign_in_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp" />
 
 
 </FrameLayout>
