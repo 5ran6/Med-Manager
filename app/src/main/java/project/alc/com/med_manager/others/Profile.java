@@ -3,6 +3,11 @@ package project.alc.com.med_manager.others;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteCantOpenDatabaseException;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,6 +20,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.Auth;
@@ -30,8 +36,13 @@ import com.google.android.gms.common.api.Status;
 
 import org.w3c.dom.Text;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
 import project.alc.com.med_manager.HomeActivity;
 import project.alc.com.med_manager.R;
+import project.alc.com.med_manager.database.DatabaseHelperProfile;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,6 +53,8 @@ import project.alc.com.med_manager.R;
  * create an instance of this fragment.
  */
 public class Profile extends Fragment implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
+    public static DatabaseHelperProfile sQliteHelper;
+
     private ProgressDialog progressDialog;
     private LinearLayout profile_section;
     private Button SignOut, done;
@@ -50,7 +63,8 @@ public class Profile extends Fragment implements View.OnClickListener, GoogleApi
     private ImageView passport;
     private GoogleApiClient googleApiClient;
     private static final int REQ_CODE = 9001;
-
+    String Name;
+    String Email;
     View view;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -101,6 +115,9 @@ public class Profile extends Fragment implements View.OnClickListener, GoogleApi
         getActivity().setTitle("Profile");
         view = inflater.inflate(R.layout.fragment_profile, container, false);
 
+        sQliteHelper = new DatabaseHelperProfile(getContext(), "med.sqlite", null, 1);
+        sQliteHelper.queryData("CREATE TABLE IF NOT EXISTS PROFILE (Id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR, email VARCHAR, image BLOB)");
+
         profile_section = (LinearLayout) view.findViewById(R.id.profile_section);
         name = (TextView) view.findViewById(R.id.name);
         email = (TextView) view.findViewById(R.id.email);
@@ -108,6 +125,8 @@ public class Profile extends Fragment implements View.OnClickListener, GoogleApi
         SignOut = (Button) view.findViewById(R.id.sign_out_button);
         done = (Button) view.findViewById(R.id.done);
         passport = (ImageView) view.findViewById(R.id.profile_pic);
+        passport.setDrawingCacheEnabled(true);
+        passport.buildDrawingCache();
         done.setOnClickListener(this);
         SignIn.setOnClickListener(this);
         SignOut.setOnClickListener(this);
@@ -137,18 +156,36 @@ public class Profile extends Fragment implements View.OnClickListener, GoogleApi
     public void handleResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
             GoogleSignInAccount account = result.getSignInAccount();
-            String Name = account.getDisplayName();
-            String Email = account.getEmail();
             try {
+                Name = account.getDisplayName();
+                Email = account.getEmail();
                 String img_url = account.getPhotoUrl().toString();
                 Glide.with(this).load(img_url).into(passport);
+
+
+//                Uri uri = account.getPhotoUrl();
+//
+//                InputStream inputStream = getActivity().getContentResolver().openInputStream(uri);
+                Drawable d = passport.getDrawable();
+                BitmapDrawable bitmapDrawable = ((BitmapDrawable) d);
+                Bitmap bitmap = bitmapDrawable.getBitmap();
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                byte[] imageInByte = byteArrayOutputStream.toByteArray();
+                //             passport.setImageBitmap(bitmap);
+                sQliteHelper.insertData(Name, Email, imageInByte);
+                Toast.makeText(getContext(), "Added to db successfully!", Toast.LENGTH_SHORT).show();
+
+                //add to database
+                name.setText(Name);
+                email.setText(Email);
+                updateUI(true);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            name.setText(Name);
-            email.setText(Email);
-            updateUI(true);
-        } else {
+        } else
+
+        {
             updateUI(false);
         }
     }
@@ -158,11 +195,31 @@ public class Profile extends Fragment implements View.OnClickListener, GoogleApi
 //            progressDialog.dismiss();
             profile_section.setVisibility(View.VISIBLE);
             SignIn.setVisibility(View.GONE);
+            try {
+                //add to database
+//                sQliteHelper.insertData(Name, Email, imageViewToByte(passport));
+                Toast.makeText(getContext(), "Added to db successfully!", Toast.LENGTH_SHORT).show();
+
+            } catch (SQLiteCantOpenDatabaseException d) {
+                d.printStackTrace();
+
+            }
         } else {
             profile_section.setVisibility(View.GONE);
             SignIn.setVisibility(View.VISIBLE);
+            sQliteHelper.deleteAll();
+            Toast.makeText(getContext(), "Dropped Table successfully!", Toast.LENGTH_SHORT).show();
+
         }
 
+    }
+
+    private byte[] imageViewToByte(ImageView image) {
+        Bitmap bm = passport.getDrawingCache();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        final byte[] byteArray = stream.toByteArray();
+        return byteArray;
     }
 
     @Override
@@ -171,6 +228,8 @@ public class Profile extends Fragment implements View.OnClickListener, GoogleApi
         if (requestCode == REQ_CODE) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleResult(result);
+            result.getSignInAccount().getPhotoUrl();
+
 //            progressDialog.setMessage("Logging in");
 //            progressDialog.setCancelable(false);
 //            progressDialog.setTitle("Processing");

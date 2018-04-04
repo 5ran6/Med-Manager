@@ -1,61 +1,18 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/background_img"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
->
+    android:background="@drawable/background_img"
+    android:padding="10dp">
 
-    <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical">
 
-        <TextView
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="@string/exit"
-            android:textSize="25dp"
-            android:textStyle="italic" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/yes"
-                android:layout_width="80dp"
-                android:layout_height="40dp"
-                android:background="@drawable/custom_btn_orange"
-                android:text="@string/yes"
-                android:textColor="@color/lily_white"
-                android:textStyle="italic" />
-
-            <TextView
-                android:layout_width="10dp"
-                android:layout_height="0dp" />
-
-            <Button
-                android:id="@+id/no"
-                android:layout_width="80dp"
-                android:layout_height="40dp"
-                android:background="@drawable/custom_btn_black_pearl"
-                android:text="@string/no"
-                android:textColor="@color/lily_white"
-                android:textStyle="italic" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/home"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:src="@android:drawable/ic_menu_today" />
+        android:layout_gravity="center"
+        android:padding="10dp"
+        android:text="@string/exit"
+        android:textSize="25sp"
+        android:textStyle="italic" />
+
 </FrameLayout>

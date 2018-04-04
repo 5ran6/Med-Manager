@@ -31,6 +31,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import project.alc.com.med_manager.database.DatabaseHelperProfile;
 import project.alc.com.med_manager.medication.Doctor;
 import project.alc.com.med_manager.medication.Medications;
 import project.alc.com.med_manager.others.About;
@@ -39,6 +40,8 @@ import project.alc.com.med_manager.reminder.Appointment;
 import project.alc.com.med_manager.reminder.Medication;
 
 public class HomeActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
+    public static DatabaseHelperProfile sQliteHelper;
+
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     private ImageView curentCurrency;
@@ -100,7 +103,6 @@ public class HomeActivity extends AppCompatActivity implements SharedPreferences
 
                 //  Check either activity or app is open very first time or not and do action
                 if (isFirstStart) {
-
                     //  Launch application introduction screen
                     Intent i = new Intent(HomeActivity.this, MyIntro.class);
                     startActivity(i);
@@ -117,6 +119,9 @@ public class HomeActivity extends AppCompatActivity implements SharedPreferences
         NavigationView navigationView = (NavigationView) findViewById(R.id.nv);
         View img = navigationView.getHeaderView(0);
 
+        sQliteHelper = new DatabaseHelperProfile(this, "med.sqlite", null, 1);
+        sQliteHelper.queryData("CREATE TABLE IF NOT EXISTS PROFILE (Id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR, email VARCHAR, image BLOB)");
+
         //img_cover = (ImageView) findViewById(R.id.backdrop);
         frameLayout = (FrameLayout) findViewById(R.id.flcontent);
         //mainLay = (RelativeLayout) findViewById(R.id.main);
@@ -132,6 +137,7 @@ public class HomeActivity extends AppCompatActivity implements SharedPreferences
 
         sharedPref = getSharedPreferences(getString(R.string.shared_pref), Context.MODE_PRIVATE);
         editor = sharedPref.edit();
+
 
 
     }
@@ -247,7 +253,7 @@ public class HomeActivity extends AppCompatActivity implements SharedPreferences
                 //frameLayout.setVisibility(View.GONE);
                 fragmentClass = Profile.class;
                 curentCurrency.setImageResource(R.drawable.doctor);
-                currentTextView.setText("");
+                currentTextView.setText(sQliteHelper.getDetails(1)[1]);
                 break;
             case R.id.about:
                 //  frameLayout.setVisibility(View.GONE);

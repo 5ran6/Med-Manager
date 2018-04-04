@@ -87,7 +87,8 @@ public class MyIntro extends AppIntro {
         // Do something here when users click or tap on Skip button.
 
         finish();
-
+//        Intent intent = new Intent(this, LoginActivity.class);
+//        startActivity(intent);
     }
 
     @Override
@@ -99,6 +100,8 @@ public class MyIntro extends AppIntro {
     public void onDonePressed() {
         // Do something here when users click or tap tap on Done button.
         finish();
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 
     @Override

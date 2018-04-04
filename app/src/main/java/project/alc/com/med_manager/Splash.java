@@ -46,6 +46,6 @@ public class Splash extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        }, 4000); // 4000 milliseconds delay
+        }, 1000); // 4000 milliseconds delay
     }
 }
