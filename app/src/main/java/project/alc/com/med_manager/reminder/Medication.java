@@ -39,6 +39,8 @@ import project.alc.com.med_manager.view.NotesAdapter;
  * create an instance of this fragment.
  */
 public class Medication extends Fragment {
+// I basically recycled code here. Used the codes from Medications Fragment class without using the Floating Action Button
+
     View view;
     private NotesAdapter mAdapter;
     private List<Note> notesList = new ArrayList<>();
