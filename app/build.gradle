@@ -20,6 +20,9 @@ android {
         }
     }
 }
+//packagingOptions {
+//    exclude 'LICENSE.txt'
+//}
 
 dependencies {
     compile 'com.google.android.gms:play-services-auth:11.8.0'
@@ -27,6 +30,7 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.github.paolorotolo:appintro:3.3.0'
