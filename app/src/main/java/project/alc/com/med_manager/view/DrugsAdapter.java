@@ -14,16 +14,23 @@ import android.widget.TextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import project.alc.com.med_manager.R;
 import project.alc.com.med_manager.database.model.Note;
 
-public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder> {
+public class DrugsAdapter extends RecyclerView.Adapter<DrugsAdapter.MyViewHolder> {
+//    ArrayList<Note> arrayList = new ArrayList<>();
+
 
     private Context context;
     private List<Note> notesList;
+
+    DrugsAdapter(List<Note> notesList) {
+        this.notesList = notesList;
+    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView note;
@@ -40,7 +47,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
     }
 
 
-    public NotesAdapter(Context context, List<Note> notesList) {
+    public DrugsAdapter(Context context, List<Note> notesList) {
         this.context = context;
         this.notesList = notesList;
     }
@@ -93,5 +100,11 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
         }
 
         return "";
+    }
+
+    public void setFilter(List<Note> newList) {
+        notesList = new ArrayList<>();
+        notesList.addAll(newList);
+        notifyDataSetChanged();
     }
 }

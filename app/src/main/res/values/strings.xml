@@ -51,6 +51,7 @@
     <string name="shared_pref">MED</string>
 
 
+    <string name="search_item">Search</string>
     <string name="remove_item">Remove</string>
     <string name="app_intro_skip">Welcome</string>
     <string name="intro_text_1">An awesome android app the helps you manage your meds intake and improves your health</string>

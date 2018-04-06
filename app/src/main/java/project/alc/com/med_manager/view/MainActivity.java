@@ -27,7 +27,7 @@ import project.alc.com.med_manager.utils.MyDividerItemDecoration;
 import project.alc.com.med_manager.utils.RecyclerTouchListener;
 
 public class MainActivity extends AppCompatActivity {
-    private NotesAdapter mAdapter;
+    private DrugsAdapter mAdapter;
     private List<Note> notesList = new ArrayList<>();
     private CoordinatorLayout coordinatorLayout;
     private RecyclerView recyclerView;
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mAdapter = new NotesAdapter(this, notesList);
+        mAdapter = new DrugsAdapter(this, notesList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());

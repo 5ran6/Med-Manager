@@ -7,12 +7,17 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -28,7 +33,7 @@ import project.alc.com.med_manager.database.model.Note;
 import project.alc.com.med_manager.medication.Medications;
 import project.alc.com.med_manager.utils.MyDividerItemDecoration;
 import project.alc.com.med_manager.utils.RecyclerTouchListener;
-import project.alc.com.med_manager.view.NotesAdapter;
+import project.alc.com.med_manager.view.DrugsAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,11 +43,11 @@ import project.alc.com.med_manager.view.NotesAdapter;
  * Use the {@link Medication#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Medication extends Fragment {
+public class Medication extends Fragment implements SearchView.OnQueryTextListener {
 // I basically recycled code here. Used the codes from Medications Fragment class without using the Floating Action Button
 
     View view;
-    private NotesAdapter mAdapter;
+    private DrugsAdapter mAdapter;
     private List<Note> notesList = new ArrayList<>();
     private CoordinatorLayout coordinatorLayout;
     private RecyclerView recyclerView;
@@ -99,7 +104,7 @@ public class Medication extends Fragment {
         getActivity().setTitle("Medication");
 
         view = inflater.inflate(R.layout.fragment_medication, container, false);
-
+        setHasOptionsMenu(true);
         coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinator_layout);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         noNotesView = (TextView) view.findViewById(R.id.empty_notes_view);
@@ -117,7 +122,7 @@ public class Medication extends Fragment {
             }
         });
 
-        mAdapter = new NotesAdapter(getContext(), notesList);
+        mAdapter = new DrugsAdapter(getContext(), notesList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -171,6 +176,37 @@ public class Medication extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.search, menu);
+        MenuItem menuItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
+        searchView.setOnQueryTextListener(this);
+        super.onCreateOptionsMenu(menu, inflater);
+// /return true;
+    }
+
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        newText = newText.toLowerCase();
+        ArrayList<Note> newList = new ArrayList<>();
+        for (Note note : notesList) {
+            String drug = note.getNote().toLowerCase();
+            if (drug.contains(newText)) {
+                newList.add(note);
+
+            }
+        }
+        mAdapter.setFilter(newList);
+        return true;
     }
 
     /**

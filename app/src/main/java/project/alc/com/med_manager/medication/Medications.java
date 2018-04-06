@@ -9,18 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.content.DialogInterface;
-import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,8 +28,7 @@ import project.alc.com.med_manager.database.DatabaseHelper;
 import project.alc.com.med_manager.database.model.Note;
 import project.alc.com.med_manager.utils.MyDividerItemDecoration;
 import project.alc.com.med_manager.utils.RecyclerTouchListener;
-import project.alc.com.med_manager.view.MainActivity;
-import project.alc.com.med_manager.view.NotesAdapter;
+import project.alc.com.med_manager.view.DrugsAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,7 +40,7 @@ import project.alc.com.med_manager.view.NotesAdapter;
  */
 public class Medications extends Fragment {
     View view;
-    private NotesAdapter mAdapter;
+    private DrugsAdapter mAdapter;
     private List<Note> notesList = new ArrayList<>();
     private CoordinatorLayout coordinatorLayout;
     private RecyclerView recyclerView;
@@ -120,7 +114,7 @@ public class Medications extends Fragment {
             }
         });
 
-        mAdapter = new NotesAdapter(getContext(), notesList);
+        mAdapter = new DrugsAdapter(getContext(), notesList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
