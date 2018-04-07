@@ -1,14 +1,15 @@
 package project.alc.com.med_manager.others;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteCantOpenDatabaseException;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -23,6 +24,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -30,15 +36,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResolvingResultCallbacks;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
-import org.w3c.dom.Text;
-
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 
 import project.alc.com.med_manager.HomeActivity;
 import project.alc.com.med_manager.R;
@@ -63,6 +64,7 @@ public class Profile extends Fragment implements View.OnClickListener, GoogleApi
     private ImageView passport;
     private GoogleApiClient googleApiClient;
     private static final int REQ_CODE = 9001;
+    GoogleSignInAccount account;
     String Name;
     String Email;
     View view;
@@ -115,8 +117,8 @@ public class Profile extends Fragment implements View.OnClickListener, GoogleApi
         getActivity().setTitle("Profile");
         view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        sQliteHelper = new DatabaseHelperProfile(getContext(), "med.sqlite", null, 1);
-        sQliteHelper.queryData("CREATE TABLE IF NOT EXISTS PROFILE (Id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR, email VARCHAR, image BLOB)");
+        sQliteHelper = new DatabaseHelperProfile(getContext(), "profile.sqlite", null, 1);
+//        sQliteHelper.onCreate("CREATE TABLE IF NOT EXISTS PROFILE (Id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR, email VARCHAR, image BLOB)");
 
         profile_section = (LinearLayout) view.findViewById(R.id.profile_section);
         name = (TextView) view.findViewById(R.id.name);
@@ -142,6 +144,7 @@ public class Profile extends Fragment implements View.OnClickListener, GoogleApi
     public void signIn() {
         Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         startActivityForResult(intent, REQ_CODE);
+        googleApiClient.disconnect();
     }
 
     public void signOut() {
@@ -149,56 +152,58 @@ public class Profile extends Fragment implements View.OnClickListener, GoogleApi
             @Override
             public void onResult(@NonNull Status status) {
                 updateUI(false);
+                googleApiClient.disconnect();
             }
         });
     }
 
     public void handleResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
-            GoogleSignInAccount account = result.getSignInAccount();
             try {
+                account = result.getSignInAccount();
                 Name = account.getDisplayName();
                 Email = account.getEmail();
                 String img_url = account.getPhotoUrl().toString();
-                Glide.with(this).load(img_url).into(passport);
+                Glide.with(this).load(img_url).asBitmap().into(new BitmapImageViewTarget(passport) {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        super.onResourceReady(resource, glideAnimation);
+                        //convert the drawable to byte[] image and save to database
+                        Drawable d = passport.getDrawable().getCurrent();
+                        BitmapDrawable bitmapDrawable = ((BitmapDrawable) d);
+                        Bitmap bitmap = bitmapDrawable.getBitmap();
+                        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+                        byte[] imageInByte = byteArrayOutputStream.toByteArray();
 
-
-//                Uri uri = account.getPhotoUrl();
-//
-//                InputStream inputStream = getActivity().getContentResolver().openInputStream(uri);
-                Drawable d = passport.getDrawable();
-                BitmapDrawable bitmapDrawable = ((BitmapDrawable) d);
-                Bitmap bitmap = bitmapDrawable.getBitmap();
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-                byte[] imageInByte = byteArrayOutputStream.toByteArray();
-                //             passport.setImageBitmap(bitmap);
-                sQliteHelper.insertData(Name, Email, imageInByte);
-                Toast.makeText(getContext(), "Added to db successfully!", Toast.LENGTH_SHORT).show();
-
-                //add to database
+                        //add to database
+                        sQliteHelper.insertData(Name.toString(), Email.toString(), imageInByte);
+                        Toast.makeText(getContext(), "Added to db successfully!", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 name.setText(Name);
                 email.setText(Email);
                 updateUI(true);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else
-
-        {
+        } else {
             updateUI(false);
         }
     }
 
     public void updateUI(boolean isLogin) {
+//close googlee api
+        googleApiClient.disconnect();
         if (isLogin) {
 //            progressDialog.dismiss();
             profile_section.setVisibility(View.VISIBLE);
             SignIn.setVisibility(View.GONE);
             try {
                 //add to database
-//                sQliteHelper.insertData(Name, Email, imageViewToByte(passport));
-                Toast.makeText(getContext(), "Added to db successfully!", Toast.LENGTH_SHORT).show();
+//                 sQliteHelper.insertData(Name, Email, imageViewToByte(passport));
+                //     Toast.makeText(getContext(), "Added to db successfully!", Toast.LENGTH_SHORT).show();
 
             } catch (SQLiteCantOpenDatabaseException d) {
                 d.printStackTrace();

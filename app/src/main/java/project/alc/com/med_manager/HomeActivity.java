@@ -10,7 +10,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -21,15 +23,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import project.alc.com.med_manager.database.DatabaseHelperProfile;
@@ -48,6 +45,9 @@ public class HomeActivity extends AppCompatActivity implements SharedPreferences
     private ImageView curentCurrency;
     private TextView currentTextView;
     public boolean isFirstStart;
+    String name;
+    String email;
+    byte[] image;
     //  private SharedPreferences mSharedPreferences;
 
 
@@ -120,8 +120,8 @@ public class HomeActivity extends AppCompatActivity implements SharedPreferences
         NavigationView navigationView = (NavigationView) findViewById(R.id.nv);
         View img = navigationView.getHeaderView(0);
 
-        sQliteHelper = new DatabaseHelperProfile(this, "med.sqlite", null, 1);
-        sQliteHelper.queryData("CREATE TABLE IF NOT EXISTS PROFILE (Id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR, email VARCHAR, image BLOB)");
+        sQliteHelper = new DatabaseHelperProfile(this, "profile.sqlite", null, 1);
+        sQliteHelper.queryData("CREATE TABLE IF NOT EXISTS PICTURE(Id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR, email VARCHAR, image BLOB)");
 
         //img_cover = (ImageView) findViewById(R.id.backdrop);
         frameLayout = (FrameLayout) findViewById(R.id.flcontent);
@@ -243,7 +243,7 @@ public class HomeActivity extends AppCompatActivity implements SharedPreferences
             case R.id.meds:
                 //frameLayout.setVisibility(View.GONE);
                 curentCurrency.setImageResource(R.drawable.doctor);
-                currentTextView.setText("");
+                currentTextView.setText("MEDS");
                 fragmentClass = Medications.class;
                 break;
             case R.id.doc:
@@ -255,8 +255,23 @@ public class HomeActivity extends AppCompatActivity implements SharedPreferences
             case R.id.profile:
                 //frameLayout.setVisibility(View.GONE);
                 fragmentClass = Profile.class;
-                curentCurrency.setImageResource(R.drawable.doctor);
-                currentTextView.setText(sQliteHelper.getDetails(1)[1]);
+//                curentCurrency.setImageResource(R.drawable.doctor);
+                //      currentTextView.setText(sQliteHelper.getDetails(3)[1]);
+                //get all data from sqlite
+                Cursor cursor = sQliteHelper.getData("SELECT * FROM PICTURE");
+                while (cursor.moveToNext()) {
+                    int id = cursor.getInt(0);
+                    name = cursor.getString(1);
+                    email = cursor.getString(2);
+                    image = cursor.getBlob(3);
+                }
+                if (name != null || email != null) {
+                    byte[] Image = image;
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(Image, 0, Image.length);
+                    curentCurrency.setImageBitmap(bitmap);
+                    currentTextView.setText(name);
+                }
+
                 break;
             case R.id.about:
                 //  frameLayout.setVisibility(View.GONE);

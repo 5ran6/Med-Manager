@@ -18,6 +18,7 @@
             android:id="@+id/current_currency"
             android:layout_width="75dp"
             android:layout_height="75dp"
+            android:paddingRight="6dp"
             android:src="@drawable/doctor" />
 
         <TextView
