@@ -76,7 +76,7 @@ public class DrugsAdapter extends RecyclerView.Adapter<DrugsAdapter.MyViewHolder
 //     holder.dot.setText(Html.fromHtml("&#8224;"));
 //
         // Formatting and displaying timestamp
-        holder.timestamp.setText("Added on " + formatDate(note.getTimestamp()) + " (" + note.getDose() + " time(s) a day)");
+        holder.timestamp.setText("Added on " + formatDate(note.getTimestamp()) + " (" + note.getFrequency() + " time(s) a day)");
     }
 
     @Override

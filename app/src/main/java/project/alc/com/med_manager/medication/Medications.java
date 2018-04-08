@@ -16,6 +16,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -189,10 +190,10 @@ public class Medications extends Fragment {
      * Inserting new note in db
      * and refreshing the list
      */
-    private void createNote(String note, int dose) {
+    private void createNote(String note, String description, String start_date, String end_date, String frequency, int dose) {
         // inserting note in db and getting
         // newly inserted note id
-        long id = db.insertNote(note, dose);
+        long id = db.insertNote(note, description, start_date, end_date, frequency, dose);
 
         // get the newly inserted note from db
         Note n = db.getNote(id);
@@ -213,11 +214,15 @@ public class Medications extends Fragment {
      * Updating note in db and updating
      * item in the list by its position
      */
-    private void updateNote(String note, int dose, int position) {
+    private void updateNote(String note, String description, String start_date, String end_date, String frequency, int dose, int position) {
         Note n = notesList.get(position);
         // updating note text
         n.setNote(note);
         n.setDose(dose);
+        n.setFrequency(frequency);
+        n.setDescription(description);
+        n.setStart(start_date);
+        n.setEnd(end_date);
 
         // updating note in db
         db.updateNote(n);
@@ -283,13 +288,23 @@ public class Medications extends Fragment {
         alertDialogBuilderUserInput.setView(view);
 
         final EditText inputNote = (EditText) view.findViewById(R.id.note);
-        final EditText dose = (EditText) view.findViewById(R.id.dosage);
+        final EditText dose = (EditText) view.findViewById(R.id.dose);
+        final EditText frequency = (EditText) view.findViewById(R.id.frequency);
+        final EditText description = (EditText) view.findViewById(R.id.description);
+
+        final DatePicker datePickerStart = (DatePicker) view.findViewById(R.id.start_date);
+        final DatePicker datePickerEnd = (DatePicker) view.findViewById(R.id.end_date);
+
+
         TextView dialogTitle = (TextView) view.findViewById(R.id.dialog_title);
 
         dialogTitle.setText(!shouldUpdate ? getString(R.string.lbl_new_note_title) : getString(R.string.lbl_edit_drug_title));
 
         if (shouldUpdate && note != null) {
             inputNote.setText(note.getNote());
+            dose.setText(note.getDose());
+            description.setText(note.getDescription());
+            frequency.setText(note.getFrequency());
         }
         alertDialogBuilderUserInput
                 .setCancelable(false)
@@ -312,20 +327,51 @@ public class Medications extends Fragment {
             @Override
             public void onClick(View v) {
                 // Show toast message when no text is entered
-                if (TextUtils.isEmpty(inputNote.getText().toString()) || TextUtils.isEmpty(dose.getText().toString())) {
-                    Toast.makeText(getContext(), "Enter new Drug and Dosage!", Toast.LENGTH_SHORT).show();
+                if (TextUtils.isEmpty(inputNote.getText().toString()) || TextUtils.isEmpty(dose.getText().toString()) || TextUtils.isEmpty(description.getText().toString()) || TextUtils.isEmpty(frequency.getText().toString())) {
+                    Toast.makeText(getContext(), "Fill in all fields!", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
                     alertDialog.dismiss();
+
                 }
 
                 // check if user updating note
                 if (shouldUpdate && note != null) {
+                    //get start date
+                    int day = datePickerStart.getDayOfMonth();
+                    int month = datePickerStart.getMonth();
+                    int year = datePickerStart.getYear();
+                    String start_date = String.valueOf(day) + "/" + String.valueOf(month) + "/" + String.valueOf(year);
+                    Toast.makeText(getContext(), start_date, Toast.LENGTH_LONG).show();
+
+                    //get end date
+                    int day1 = datePickerEnd.getDayOfMonth();
+                    int month2 = datePickerEnd.getMonth();
+                    int year3 = datePickerEnd.getYear();
+                    String end_date = String.valueOf(day1) + "/" + String.valueOf(month2) + "/" + String.valueOf(year3);
+                    Toast.makeText(getContext(), end_date, Toast.LENGTH_LONG).show();
+
                     // update note by it's id
-                    updateNote(inputNote.getText().toString(), Integer.parseInt(dose.getText().toString()), position);
+                    //you can only edit the name of the drug and the dose
+                    updateNote(inputNote.getText().toString(), description.getText().toString(), start_date, end_date, frequency.getText().toString(), Integer.parseInt(dose.getText().toString()), position);
                 } else {
+
+                    //get start date
+                    int day = datePickerStart.getDayOfMonth();
+                    int month = datePickerStart.getMonth();
+                    int year = datePickerStart.getYear();
+                    String start_date = String.valueOf(day) + "/" + String.valueOf(month) + "/" + String.valueOf(year);
+                    Toast.makeText(getContext(), start_date, Toast.LENGTH_LONG).show();
+
+                    //get end date
+                    int day1 = datePickerEnd.getDayOfMonth();
+                    int month2 = datePickerEnd.getMonth();
+                    int year3 = datePickerEnd.getYear();
+                    String end_date = String.valueOf(day1) + "/" + String.valueOf(month2) + "/" + String.valueOf(year3);
+                    Toast.makeText(getContext(), end_date, Toast.LENGTH_LONG).show();
+
                     // create new note
-                    createNote(inputNote.getText().toString(), Integer.parseInt(dose.getText().toString()));
+                    createNote(inputNote.getText().toString(), description.getText().toString(), start_date, end_date, frequency.getText().toString(), Integer.parseInt(dose.getText().toString()));
                 }
             }
         });

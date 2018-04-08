@@ -9,10 +9,16 @@
     <string name="lbl_edit_drug_title">Edit Note</string>
 
     <string name="hint_enter_note">Name of Drug!</string>
-    <string name="hint_enter_times">Dosage (number of times/day)!</string>
+    <string name="hint_enter_dose">How many pills per take</string>
+    <string name="hint_enter_description">Description</string>
+    <string name="hint_enter_times">Dosage frequency</string>
 
     <string name="lbl_new_drug_title">Drug name</string>
     <string name="lbl_new_dose_title">How many times/day</string>
+    <string name="lbl_new_dose_description">Description</string>
+    <string name="lbl_new_dose_dose">Dose</string>
+    <string name="lbl_new_dose_start">Start Date</string>
+    <string name="lbl_new_dose_end">End Date</string>
 
 
     <string name="name">Name</string>

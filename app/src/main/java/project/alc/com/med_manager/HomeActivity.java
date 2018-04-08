@@ -138,13 +138,20 @@ public class HomeActivity extends AppCompatActivity implements SharedPreferences
 
         sharedPref = getSharedPreferences(getString(R.string.shared_pref), Context.MODE_PRIVATE);
         editor = sharedPref.edit();
+        Cursor cursor = sQliteHelper.getData("SELECT * FROM PICTURE");
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(0);
+            name = cursor.getString(1);
+            email = cursor.getString(2);
+            image = cursor.getBlob(3);
+        }
+        if (name != null || email != null) {
+            byte[] Image = image;
+            Bitmap bitmap = BitmapFactory.decodeByteArray(Image, 0, Image.length);
+            curentCurrency.setImageBitmap(bitmap);
+            currentTextView.setText(name + "\n" + email);
+        }
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.search, menu);
-//        return true;
-//    }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -152,7 +159,6 @@ public class HomeActivity extends AppCompatActivity implements SharedPreferences
 //        loadArray();
 //        saveArray();
 //        adapter.notifyDataSetChanged();
-
     }
 
 
@@ -223,71 +229,30 @@ public class HomeActivity extends AppCompatActivity implements SharedPreferences
         switch (menuItem.getItemId()) {
             case R.id.home:
                 fragmentClass = Home.class;
-                curentCurrency.setImageResource(R.drawable.ic_home_black_24dp);
-                currentTextView.setText("");
                 break;
             case R.id.med:
-                // frameLayout.setVisibility(View.GONE);
                 fragmentClass = Medication.class;
-                curentCurrency.setImageResource(R.drawable.ic_home_black_24dp);
-                currentTextView.setText("");
-
                 break;
             case R.id.doc_app:
-                //frameLayout.setVisibility(View.GONE);
-                curentCurrency.setImageResource(R.drawable.doctor);
-                currentTextView.setText("");
-
                 fragmentClass = Appointment.class;
                 break;
             case R.id.meds:
-                //frameLayout.setVisibility(View.GONE);
-                curentCurrency.setImageResource(R.drawable.doctor);
-                currentTextView.setText("MEDS");
                 fragmentClass = Medications.class;
                 break;
             case R.id.doc:
-                //frameLayout.setVisibility(View.GONE);
                 fragmentClass = Doctor.class;
-                curentCurrency.setImageResource(R.drawable.doctor);
-                currentTextView.setText("");
                 break;
             case R.id.profile:
-                //frameLayout.setVisibility(View.GONE);
                 fragmentClass = Profile.class;
-//                curentCurrency.setImageResource(R.drawable.doctor);
-                //      currentTextView.setText(sQliteHelper.getDetails(3)[1]);
-                //get all data from sqlite
-                Cursor cursor = sQliteHelper.getData("SELECT * FROM PICTURE");
-                while (cursor.moveToNext()) {
-                    int id = cursor.getInt(0);
-                    name = cursor.getString(1);
-                    email = cursor.getString(2);
-                    image = cursor.getBlob(3);
-                }
-                if (name != null || email != null) {
-                    byte[] Image = image;
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(Image, 0, Image.length);
-                    curentCurrency.setImageBitmap(bitmap);
-                    currentTextView.setText(name);
-                }
-
                 break;
             case R.id.about:
-                //  frameLayout.setVisibility(View.GONE);
                 fragmentClass = About.class;
-                curentCurrency.setImageResource(R.drawable.doctor);
-                currentTextView.setText("");
                 break;
             case R.id.exit:
                 finishAffinity();
-//                fragmentClass = Exit.class;
-//                curentCurrency.setImageResource(R.drawable.ic_home_black_24dp);
-//                currentTextView.setText("");
                 break;
             default:
                 fragmentClass = HomeActivity.class;
-
         }
         try {
             myFragment = (Fragment) fragmentClass.newInstance();
@@ -299,7 +264,6 @@ public class HomeActivity extends AppCompatActivity implements SharedPreferences
         menuItem.setChecked(true);
         setTitle(menuItem.getItemId());
         mDrawerLayout.closeDrawers();
-
     }
 
     @Override

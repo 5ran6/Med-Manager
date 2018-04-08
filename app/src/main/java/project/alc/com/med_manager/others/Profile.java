@@ -60,8 +60,8 @@ public class Profile extends Fragment implements View.OnClickListener, GoogleApi
     private LinearLayout profile_section;
     private Button SignOut, done;
     private SignInButton SignIn;
-    private TextView name, email;
-    private ImageView passport;
+    private TextView name, email, currentTextView;
+    private ImageView passport, profile;
     private GoogleApiClient googleApiClient;
     private static final int REQ_CODE = 9001;
     GoogleSignInAccount account;
@@ -121,12 +121,18 @@ public class Profile extends Fragment implements View.OnClickListener, GoogleApi
 //        sQliteHelper.onCreate("CREATE TABLE IF NOT EXISTS PROFILE (Id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR, email VARCHAR, image BLOB)");
 
         profile_section = (LinearLayout) view.findViewById(R.id.profile_section);
+
+        currentTextView = (TextView) getActivity().findViewById(R.id.name);
+
         name = (TextView) view.findViewById(R.id.name);
         email = (TextView) view.findViewById(R.id.email);
         SignIn = (SignInButton) view.findViewById(R.id.sign_in_button);
         SignOut = (Button) view.findViewById(R.id.sign_out_button);
         done = (Button) view.findViewById(R.id.done);
         passport = (ImageView) view.findViewById(R.id.profile_pic);
+
+        profile = (ImageView) getActivity().findViewById(R.id.current_currency);
+
         passport.setDrawingCacheEnabled(true);
         passport.buildDrawingCache();
         done.setOnClickListener(this);
@@ -144,15 +150,14 @@ public class Profile extends Fragment implements View.OnClickListener, GoogleApi
     public void signIn() {
         Intent intent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
         startActivityForResult(intent, REQ_CODE);
-        googleApiClient.disconnect();
     }
 
     public void signOut() {
+
         Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
             @Override
             public void onResult(@NonNull Status status) {
                 updateUI(false);
-                googleApiClient.disconnect();
             }
         });
     }
@@ -172,6 +177,11 @@ public class Profile extends Fragment implements View.OnClickListener, GoogleApi
                         Drawable d = passport.getDrawable().getCurrent();
                         BitmapDrawable bitmapDrawable = ((BitmapDrawable) d);
                         Bitmap bitmap = bitmapDrawable.getBitmap();
+
+                        //set the profile picture
+                        profile.setImageBitmap(bitmap);
+                        currentTextView.setText(name + "\n" + email);
+
                         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
                         byte[] imageInByte = byteArrayOutputStream.toByteArray();
@@ -195,7 +205,7 @@ public class Profile extends Fragment implements View.OnClickListener, GoogleApi
 
     public void updateUI(boolean isLogin) {
 //close googlee api
-        googleApiClient.disconnect();
+//        googleApiClient.disconnect();
         if (isLogin) {
 //            progressDialog.dismiss();
             profile_section.setVisibility(View.VISIBLE);
@@ -210,6 +220,7 @@ public class Profile extends Fragment implements View.OnClickListener, GoogleApi
 
             }
         } else {
+
             profile_section.setVisibility(View.GONE);
             SignIn.setVisibility(View.VISIBLE);
             sQliteHelper.deleteAll();
@@ -240,7 +251,6 @@ public class Profile extends Fragment implements View.OnClickListener, GoogleApi
 //            progressDialog.setTitle("Processing");
 //            progressDialog.show();
         }
-
     }
 
     @Override
@@ -302,5 +312,12 @@ public class Profile extends Fragment implements View.OnClickListener, GoogleApi
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        googleApiClient.stopAutoManage(getActivity());
+        googleApiClient.disconnect();
     }
 }
