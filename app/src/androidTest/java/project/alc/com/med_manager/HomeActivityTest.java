@@ -39,12 +39,12 @@ public class HomeActivityTest {
         onView(withId(R.id.currentText)).check(matches(withText("")));
     }
 
-    @Test
-    public void checkTextDisplayedInDynamicallyCreatedFragment() {
-        Medications fragment = new Medications();
-        fragment.getActivity().getSupportFragmentManager().beginTransaction()
-                .add(R.id.fab, fragment).commit();
-
-//        onView(withId(R.id.currentText)).check(matches(withText("")));
-    }
+//    @Test
+//    public void checkTextDisplayedInDynamicallyCreatedFragment() {
+//        Medications fragment = new Medications();
+//        fragment.getActivity().getSupportFragmentManager().beginTransaction()
+//                .add(R.id.fab, fragment).commit();
+//
+////        onView(withId(R.id.currentText)).check(matches(withText("")));
+//    }
 }
