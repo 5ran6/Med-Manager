@@ -20,24 +20,6 @@ public class Splash extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         img = (ImageView) findViewById(R.id.img);
-        final Animation animation = new AlphaAnimation(1, 0); // Change alpha from fully visible to invisible
-        final Transition transition = new Transition() {
-            @Override
-            public void captureEndValues(@NonNull TransitionValues transitionValues) {
-
-            }
-
-            @Override
-            public void captureStartValues(@NonNull TransitionValues transitionValues) {
-
-            }
-        };
-        animation.setDuration(2000); // duration - 2 seconds
-        animation.setInterpolator(new LinearInterpolator()); // do not alter animation rate
-        animation.setRepeatCount(Animation.INFINITE); // Repeat animation infinitely
-        animation.setRepeatMode(Animation.REVERSE); // Reverse animation at the end so the button will fade back in
-        img.startAnimation(animation);
-
         Handler handler1 = new Handler();
         handler1.postDelayed(new Runnable() {
             public void run() {
