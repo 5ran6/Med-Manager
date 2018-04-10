@@ -18,10 +18,10 @@ import project.alc.com.med_manager.database.model.Note;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 1;
 
     // Database Name
-    private static final String DATABASE_NAME = "notes_db";
+    public static final String DATABASE_NAME = "notes_db";
 
 
     public DatabaseHelper(Context context) {

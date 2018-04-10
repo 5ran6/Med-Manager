@@ -30,7 +30,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import project.alc.com.med_manager.database.DatabaseHelperProfile;
-import project.alc.com.med_manager.medication.Doctor;
+import project.alc.com.med_manager.medication.DoctorInfo;
 import project.alc.com.med_manager.medication.Medications;
 import project.alc.com.med_manager.others.About;
 import project.alc.com.med_manager.others.Profile;
@@ -39,23 +39,20 @@ import project.alc.com.med_manager.reminder.Medication;
 
 public class HomeActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     public static DatabaseHelperProfile sQliteHelper;
-
-    private DrawerLayout mDrawerLayout;
-    private ActionBarDrawerToggle mToggle;
-    private ImageView curentCurrency;
-    private TextView currentTextView;
     public boolean isFirstStart;
     String name;
     String email;
     byte[] image;
-    //  private SharedPreferences mSharedPreferences;
-
-
     FrameLayout frameLayout;
     SharedPreferences sharedPref = null;
     SharedPreferences.Editor editor = null;
     Class fragmentClass = Home.class;
+    //  private SharedPreferences mSharedPreferences;
     Fragment myFragment = (Fragment) fragmentClass.newInstance();
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mToggle;
+    private ImageView curentCurrency;
+    private TextView currentTextView;
 
     public HomeActivity() throws IllegalAccessException, InstantiationException {
     }
@@ -240,7 +237,7 @@ public class HomeActivity extends AppCompatActivity implements SharedPreferences
                 fragmentClass = Medications.class;
                 break;
             case R.id.doc:
-                fragmentClass = Doctor.class;
+                fragmentClass = DoctorInfo.class;
                 break;
             case R.id.profile:
                 fragmentClass = Profile.class;

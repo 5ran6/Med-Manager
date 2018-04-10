@@ -1,21 +1,20 @@
 package project.alc.com.med_manager.medication;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import android.content.DialogInterface;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -26,38 +25,41 @@ import java.util.List;
 
 import project.alc.com.med_manager.R;
 import project.alc.com.med_manager.database.DatabaseHelper;
+import project.alc.com.med_manager.database.DatabaseHelperDoctor;
+import project.alc.com.med_manager.database.model.Doctor;
 import project.alc.com.med_manager.database.model.Note;
 import project.alc.com.med_manager.utils.MyDividerItemDecoration;
 import project.alc.com.med_manager.utils.RecyclerTouchListener;
-import project.alc.com.med_manager.view.DrugsAdapter;
+import project.alc.com.med_manager.view.DoctorAdapter;
+
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link Medications.OnFragmentInteractionListener} interface
+ * {@link DoctorInfo.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link Medications#newInstance} factory method to
+ * Use the {@link DoctorInfo#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Medications extends Fragment {
+public class DoctorInfo extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     View view;
-    private DrugsAdapter mAdapter;
-    private List<Note> notesList = new ArrayList<>();
+    private DoctorAdapter mAdapter;
+    private List<Doctor> doctorList = new ArrayList<>();
     private CoordinatorLayout coordinatorLayout;
     private RecyclerView recyclerView;
-    private TextView noNotesView;
-    private DatabaseHelper db;
+    private TextView noDoctorView;
+    private DatabaseHelperDoctor db;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
-    public Medications() {
+    public DoctorInfo() {
         // Required empty public constructor
     }
 
@@ -67,11 +69,11 @@ public class Medications extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment Medications.
+     * @return A new instance of fragment DoctorInfo.
      */
     // TODO: Rename and change types and number of parameters
-    public static Medications newInstance(String param1, String param2) {
-        Medications fragment = new Medications();
+    public static DoctorInfo newInstance(String param1, String param2) {
+        DoctorInfo fragment = new DoctorInfo();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -92,17 +94,16 @@ public class Medications extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        getActivity().setTitle("Add/View/Edit Meds");
-
-        view = inflater.inflate(R.layout.fragment_medications, container, false);
+        getActivity().setTitle("DoctorInfo");
+        view = inflater.inflate(R.layout.fragment_doctor, container, false);
 
         coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinator_layout);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        noNotesView = (TextView) view.findViewById(R.id.empty_notes_view);
+        noDoctorView = (TextView) view.findViewById(R.id.empty_notes_view);
 
-        db = new DatabaseHelper(getContext());
+        db = new DatabaseHelperDoctor(getContext());
 
-        notesList.addAll(db.getAllNotes());
+        doctorList.addAll(db.getAllDoctors());
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +113,7 @@ public class Medications extends Fragment {
             }
         });
 
-        mAdapter = new DrugsAdapter(getContext(), notesList);
+        mAdapter = new DoctorAdapter(getContext(), doctorList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -140,9 +141,143 @@ public class Medications extends Fragment {
             }
         }));
 
-
         return view;
     }
+
+
+    /**
+     * Deleting note from SQLite and removing the
+     * item from the list by its position
+     */
+    private void deleteNote(int position) {
+        // deleting the note from db
+        db.deleteDoctor(doctorList.get(position));
+
+        // removing the note from the list
+        doctorList.remove(position);
+        mAdapter.notifyItemRemoved(position);
+
+        toggleEmptyNotes();
+    }
+
+    /**
+     * Opens dialog with Edit - Delete options
+     * Edit - 0
+     * Delete - 0
+     */
+    private void showActionsDialog(final int position) {
+        CharSequence colors[] = new CharSequence[]{"Call", "Delete"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Choose option");
+        builder.setItems(colors, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == 0) {
+                    //   showNoteDialog(true, doctorList.get(position), position);
+                    //call intent
+                } else {
+                    deleteNote(position);
+                }
+            }
+        });
+        builder.show();
+    }
+
+
+    /**
+     * Shows alert dialog with EditText options to enter / edit
+     * a note.
+     * when shouldUpdate=true, it automatically displays old note and changes the
+     * button text to UPDATE
+     */
+    private void showNoteDialog(final boolean shouldUpdate, final Doctor doctor, final int position) {
+        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(getActivity().getApplicationContext());
+        View view = layoutInflaterAndroid.inflate(R.layout.doctor_dialog, null);
+
+        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(getContext());
+        alertDialogBuilderUserInput.setView(view);
+
+        final EditText name = (EditText) view.findViewById(R.id.name);
+        final EditText phone = (EditText) view.findViewById(R.id.phone);
+
+
+        TextView dialogTitle = (TextView) view.findViewById(R.id.dialog_title);
+
+        dialogTitle.setText(!shouldUpdate ? getString(R.string.lbl_new_doc_title) : getString(R.string.lbl_edit_doc_title));
+
+        if (shouldUpdate && doctor != null) {
+            name.setText(doctor.getName());
+            phone.setText(String.valueOf(doctor.getPhone()));
+        }
+        alertDialogBuilderUserInput
+                .setCancelable(false)
+                .setPositiveButton(shouldUpdate ? "update" : "save", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogBox, int id) {
+
+                    }
+                })
+                .setNegativeButton("cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogBox, int id) {
+                                dialogBox.cancel();
+                            }
+                        });
+
+        final AlertDialog alertDialog = alertDialogBuilderUserInput.create();
+        alertDialog.show();
+
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Show toast message when no text is entered
+                if (TextUtils.isEmpty(name.getText().toString()) || TextUtils.isEmpty(phone.getText().toString())) {
+                    Toast.makeText(getContext(), "Fill in all fields!", Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
+                    alertDialog.dismiss();
+
+                }
+
+                // check if user updating note
+                if (shouldUpdate && doctor != null) {
+
+                    // update note by it's id
+                    //you can only edit the name of the drug and the dose
+                    //      updateNote(name.getText().toString(), phone.getText().toString());
+                } else {
+
+
+                    // create new note
+                    createNote(name.getText().toString(), phone.getText().toString());
+                }
+            }
+        });
+    }
+
+    /**
+     * Inserting new note in db
+     * and refreshing the list
+     */
+    private void createNote(String name, String phone) {
+        // inserting note in db and getting
+        // newly inserted note id
+        long id = db.insertDoctor(name, phone);
+
+        // get the newly inserted note from db
+        Doctor n = db.getDoctor(id);
+
+        if (n != null) {
+            // adding new note to array list at 0 position
+            doctorList.add(0, n);
+
+            // refreshing the list
+            mAdapter.notifyDataSetChanged();
+
+            toggleEmptyNotes();
+        }
+    }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -169,206 +304,17 @@ public class Medications extends Fragment {
     }
 
     /**
-     * Inserting new note in db
-     * and refreshing the list
-     */
-    private void createNote(String note, String description, String start_date, String end_date, String frequency, int dose) {
-        // inserting note in db and getting
-        // newly inserted note id
-        long id = db.insertNote(note, description, start_date, end_date, frequency, dose);
-
-        // get the newly inserted note from db
-        Note n = db.getNote(id);
-
-        if (n != null) {
-            // adding new note to array list at 0 position
-            notesList.add(0, n);
-
-            // refreshing the list
-            mAdapter.notifyDataSetChanged();
-
-            toggleEmptyNotes();
-        }
-    }
-
-    /**
-     * Updating note in db and updating
-     * item in the list by its position
-     */
-    private void updateNote(String note, String description, String start_date, String end_date, String frequency, int dose, int position) {
-        Note n = notesList.get(position);
-        // updating note text
-        n.setNote(note);
-        n.setDose(dose);
-        n.setFrequency(frequency);
-        n.setDescription(description);
-        n.setStart(start_date);
-        n.setEnd(end_date);
-
-        // updating note in db
-        db.updateNote(n);
-
-        // refreshing the list
-        notesList.set(position, n);
-        mAdapter.notifyItemChanged(position);
-
-        toggleEmptyNotes();
-    }
-
-    /**
-     * Deleting note from SQLite and removing the
-     * item from the list by its position
-     */
-    private void deleteNote(int position) {
-        // deleting the note from db
-        db.deleteNote(notesList.get(position));
-
-        // removing the note from the list
-        notesList.remove(position);
-        mAdapter.notifyItemRemoved(position);
-
-        toggleEmptyNotes();
-    }
-
-    /**
-     * Opens dialog with Edit - Delete options
-     * Edit - 0
-     * Delete - 0
-     */
-    private void showActionsDialog(final int position) {
-        CharSequence colors[] = new CharSequence[]{"Edit", "Delete"};
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Choose option");
-        builder.setItems(colors, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (which == 0) {
-                    showNoteDialog(true, notesList.get(position), position);
-                } else {
-                    deleteNote(position);
-                }
-            }
-        });
-        builder.show();
-    }
-
-    /**
-     * Shows alert dialog with EditText options to enter / edit
-     * a note.
-     * when shouldUpdate=true, it automatically displays old note and changes the
-     * button text to UPDATE
-     */
-    private void showNoteDialog(final boolean shouldUpdate, final Note note, final int position) {
-        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(getActivity().getApplicationContext());
-        View view = layoutInflaterAndroid.inflate(R.layout.note_dialog, null);
-
-        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(getContext());
-        alertDialogBuilderUserInput.setView(view);
-
-        final EditText inputNote = (EditText) view.findViewById(R.id.note);
-        final EditText dose = (EditText) view.findViewById(R.id.dose);
-        final EditText frequency = (EditText) view.findViewById(R.id.frequency);
-        final EditText description = (EditText) view.findViewById(R.id.description);
-
-        final DatePicker datePickerStart = (DatePicker) view.findViewById(R.id.start_date);
-        final DatePicker datePickerEnd = (DatePicker) view.findViewById(R.id.end_date);
-
-
-        TextView dialogTitle = (TextView) view.findViewById(R.id.dialog_title);
-
-        dialogTitle.setText(!shouldUpdate ? getString(R.string.lbl_new_note_title) : getString(R.string.lbl_edit_drug_title));
-
-        if (shouldUpdate && note != null) {
-            inputNote.setText(note.getNote());
-            dose.setText(String.valueOf(note.getDose()));
-            description.setText(note.getDescription());
-            frequency.setText(note.getFrequency());
-        }
-        alertDialogBuilderUserInput
-                .setCancelable(false)
-                .setPositiveButton(shouldUpdate ? "update" : "save", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialogBox, int id) {
-
-                    }
-                })
-                .setNegativeButton("cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialogBox, int id) {
-                                dialogBox.cancel();
-                            }
-                        });
-
-        final AlertDialog alertDialog = alertDialogBuilderUserInput.create();
-        alertDialog.show();
-
-        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Show toast message when no text is entered
-                if (TextUtils.isEmpty(inputNote.getText().toString()) || TextUtils.isEmpty(dose.getText().toString()) || TextUtils.isEmpty(description.getText().toString()) || TextUtils.isEmpty(frequency.getText().toString())) {
-                    Toast.makeText(getContext(), "Fill in all fields!", Toast.LENGTH_SHORT).show();
-                    return;
-                } else {
-                    alertDialog.dismiss();
-
-                }
-
-                // check if user updating note
-                if (shouldUpdate && note != null) {
-                    //get start date
-                    int day = datePickerStart.getDayOfMonth();
-                    int month = datePickerStart.getMonth();
-                    int year = datePickerStart.getYear();
-                    String start_date = String.valueOf(day) + "/" + String.valueOf(month) + "/" + String.valueOf(year);
-                    Toast.makeText(getContext(), start_date, Toast.LENGTH_LONG).show();
-
-                    //get end date
-                    int day1 = datePickerEnd.getDayOfMonth();
-                    int month2 = datePickerEnd.getMonth();
-                    int year3 = datePickerEnd.getYear();
-                    String end_date = String.valueOf(day1) + "/" + String.valueOf(month2) + "/" + String.valueOf(year3);
-                    Toast.makeText(getContext(), end_date, Toast.LENGTH_LONG).show();
-
-                    // update note by it's id
-                    //you can only edit the name of the drug and the dose
-                    updateNote(inputNote.getText().toString(), description.getText().toString(), start_date, end_date, frequency.getText().toString(), Integer.parseInt(dose.getText().toString()), position);
-                } else {
-
-                    //get start date
-                    int day = datePickerStart.getDayOfMonth();
-                    int month = datePickerStart.getMonth();
-                    int year = datePickerStart.getYear();
-                    String start_date = String.valueOf(day) + "/" + String.valueOf(month) + "/" + String.valueOf(year);
-                    Toast.makeText(getContext(), start_date, Toast.LENGTH_LONG).show();
-
-                    //get end date
-                    int day1 = datePickerEnd.getDayOfMonth();
-                    int month2 = datePickerEnd.getMonth();
-                    int year3 = datePickerEnd.getYear();
-                    String end_date = String.valueOf(day1) + "/" + String.valueOf(month2) + "/" + String.valueOf(year3);
-                    Toast.makeText(getContext(), end_date, Toast.LENGTH_LONG).show();
-
-                    // create new note
-                    createNote(inputNote.getText().toString(), description.getText().toString(), start_date, end_date, frequency.getText().toString(), Integer.parseInt(dose.getText().toString()));
-                }
-            }
-        });
-    }
-
-    /**
      * Toggling list and empty notes view
      */
     private void toggleEmptyNotes() {
         // you can check notesList.size() > 0
 
-        if (db.getNotesCount() > 0) {
-            noNotesView.setVisibility(View.GONE);
+        if (db.getDoctorsCount() > 0) {
+            noDoctorView.setVisibility(View.GONE);
         } else {
-            noNotesView.setVisibility(View.VISIBLE);
+            noDoctorView.setVisibility(View.VISIBLE);
         }
     }
-
 
     /**
      * This interface must be implemented by activities that contain this
@@ -384,5 +330,4 @@ public class Medications extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-
 }

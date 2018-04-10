@@ -30,9 +30,6 @@
         <activity
             android:name=".HomeActivity"
             android:theme="@style/AppTheme" />
-        <activity
-            android:name=".HomeActivityTest"
-            android:theme="@style/AppTheme" />
         <activity android:name=".MyIntro" />
         />
         <activity

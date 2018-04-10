@@ -5,16 +5,23 @@
     <string name="action_settings">Settings</string>
     <string name="activity_title_home">Meds</string>
     <string name="msg_no_notes">No medications found!</string>
+    <string name="msg_no_doctor">No doctor found!</string>
     <string name="lbl_new_note_title">New Drug</string>
+    <string name="lbl_new_doc_title">New Doctor</string>
+    <string name="lbl_edit_doc_title">Edit Doctor</string>
     <string name="lbl_edit_drug_title">Edit Note</string>
 
     <string name="hint_enter_note">Name of Drug!</string>
+    <string name="hint_enter_name">Name of Doctor!</string>
     <string name="hint_enter_dose">How many pills per take</string>
     <string name="hint_enter_description">Description</string>
     <string name="hint_enter_times">Dosage frequency</string>
+    <string name="hint_enter_number">Doctor number</string>
 
     <string name="lbl_new_drug_title">Drug name</string>
+    <string name="lbl_new_doctor_title">Doctor name</string>
     <string name="lbl_new_dose_title">How many times/day</string>
+    <string name="lbl_new_phone_title">Phone Number</string>
     <string name="lbl_new_dose_description">Description</string>
     <string name="lbl_new_dose_dose">Dose</string>
     <string name="lbl_new_dose_start">Start Date</string>
