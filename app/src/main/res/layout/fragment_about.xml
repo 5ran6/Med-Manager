@@ -8,18 +8,20 @@
 
     <ImageView
         android:layout_width="100dp"
+
         android:layout_height="100dp"
         android:layout_gravity="center"
+        android:contentDescription="@string/about"
         android:src="@drawable/doctor" />
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:textSize="30dp"
-        android:textStyle="italic"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="@string/about_app" />
+        android:text="@string/about_app"
+        android:textSize="30dp"
+        android:textStyle="italic" />
 
 
 </LinearLayout>

@@ -54,25 +54,22 @@ import project.alc.com.med_manager.database.DatabaseHelperProfile;
  * create an instance of this fragment.
  */
 public class Profile extends Fragment implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
+    private static final int REQ_CODE = 9001;
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
     public static DatabaseHelperProfile sQliteHelper;
-
-    private ProgressDialog progressDialog;
+    GoogleSignInAccount account;
+    String Name;
+    String Email;
+    View view;
     private LinearLayout profile_section;
     private Button SignOut, done;
     private SignInButton SignIn;
     private TextView name, email, currentTextView;
     private ImageView passport, profile;
     private GoogleApiClient googleApiClient;
-    private static final int REQ_CODE = 9001;
-    GoogleSignInAccount account;
-    String Name;
-    String Email;
-    View view;
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -141,7 +138,6 @@ public class Profile extends Fragment implements View.OnClickListener, GoogleApi
         GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         googleApiClient = new GoogleApiClient.Builder(getActivity().getApplicationContext()).enableAutoManage((FragmentActivity) getContext(), this).addApi(Auth.GOOGLE_SIGN_IN_API, signInOptions).build();
         profile_section.setVisibility(View.GONE);
-        progressDialog = new ProgressDialog(getContext());
         return view;
 
 
@@ -212,7 +208,7 @@ public class Profile extends Fragment implements View.OnClickListener, GoogleApi
             SignIn.setVisibility(View.GONE);
             try {
                 //add to database
-//                 sQliteHelper.insertData(Name, Email, imageViewToByte(passport));
+                //        sQliteHelper.insertData(Name, Email, imageViewToByte(passport));
                 //     Toast.makeText(getContext(), "Added to db successfully!", Toast.LENGTH_SHORT).show();
 
             } catch (SQLiteCantOpenDatabaseException d) {
@@ -299,6 +295,13 @@ public class Profile extends Fragment implements View.OnClickListener, GoogleApi
         mListener = null;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        googleApiClient.stopAutoManage(getActivity());
+        googleApiClient.disconnect();
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -312,12 +315,5 @@ public class Profile extends Fragment implements View.OnClickListener, GoogleApi
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        googleApiClient.stopAutoManage(getActivity());
-        googleApiClient.disconnect();
     }
 }

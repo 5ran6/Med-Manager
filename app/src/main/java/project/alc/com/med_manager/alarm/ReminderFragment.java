@@ -1,20 +1,17 @@
-package project.alc.com.med_manager.reminder;
+package project.alc.com.med_manager.alarm;
 
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,22 +36,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import project.alc.com.med_manager.R;
-import project.alc.com.med_manager.alarm.AlarmReceiver;
-import project.alc.com.med_manager.alarm.DateTimeSorter;
-import project.alc.com.med_manager.alarm.Reminder;
-import project.alc.com.med_manager.alarm.ReminderAddActivity;
-import project.alc.com.med_manager.alarm.ReminderDatabase;
-import project.alc.com.med_manager.alarm.ReminderEditActivity;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link Medication.OnFragmentInteractionListener} interface
+ * {@link ReminderFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link Medication#newInstance} factory method to
+ * Use the {@link ReminderFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Medication extends Fragment implements SearchView.OnQueryTextListener {
+public class ReminderFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -148,7 +139,7 @@ public class Medication extends Fragment implements SearchView.OnQueryTextListen
         }
     };
 
-    public Medication() {
+    public ReminderFragment() {
         // Required empty public constructor
     }
 
@@ -158,11 +149,11 @@ public class Medication extends Fragment implements SearchView.OnQueryTextListen
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment Medication.
+     * @return A new instance of fragment ReminderFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static Medication newInstance(String param1, String param2) {
-        Medication fragment = new Medication();
+    public static ReminderFragment newInstance(String param1, String param2) {
+        ReminderFragment fragment = new ReminderFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -182,20 +173,18 @@ public class Medication extends Fragment implements SearchView.OnQueryTextListen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        getActivity().setTitle("View");
+        getActivity().setTitle("Add/View/Edit");
 
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.activity_main_alarm, container, false);
         // Initialize reminder database
         rb = new ReminderDatabase(getActivity().getApplicationContext());
-        setHasOptionsMenu(true);
+
         // Initialize views
         //mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
         mAddReminderButton = (FloatingActionButton) view.findViewById(R.id.add_reminder);
-        mAddReminderButton.setVisibility(View.GONE);
         mList = (RecyclerView) view.findViewById(R.id.reminder_list);
         mNoReminderView = (TextView) view.findViewById(R.id.no_reminder_text);
-
 
         // To check is there are saved reminders
         // If there are no reminders display a message asking the user to create reminders
@@ -280,66 +269,6 @@ public class Medication extends Fragment implements SearchView.OnQueryTextListen
 
     protected int getDefaultItemCount() {
         return 100;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.search, menu);
-        MenuItem menuItem = menu.findItem(R.id.search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
-        searchView.setOnQueryTextListener(this);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String newText) {
-        newText = newText.toLowerCase();
-        ArrayList<Reminder> newList = new ArrayList<>();
-// Get all reminders from the database
-        List<Reminder> reminders = rb.getAllReminders();
-
-        // Initialize lists
-        List<String> Titles = new ArrayList<>();
-        List<String> Repeats = new ArrayList<>();
-        List<String> RepeatNos = new ArrayList<>();
-        List<String> RepeatTypes = new ArrayList<>();
-        List<String> Actives = new ArrayList<>();
-        List<String> DateAndTime = new ArrayList<>();
-        List<Integer> IDList = new ArrayList<>();
-        List<DateTimeSorter> DateTimeSortList = new ArrayList<>();
-
-        // Add details of all reminders in their respective lists
-        for (Reminder r : reminders) {
-            Titles.add(r.getTitle());
-            DateAndTime.add(r.getDate() + " " + r.getTime());
-            Repeats.add(r.getRepeat());
-            RepeatNos.add(r.getRepeatNo());
-            RepeatTypes.add(r.getRepeatType());
-            Actives.add(r.getActive());
-            IDList.add(r.getID());
-        }
-        reminders = new ArrayList<>();
-        reminders.addAll(newList);
-//        notifyDataSetChanged();
-
-
-        //      mAdapter.setFilter(reminders);
-
-        return true;
-    }
-//    private void toggleEmptyNotes() {
-//        // you can check notesList.size() > 0
-//
-//        if (db.getNotesCount() > 0) {
-//            noNotesView.setVisibility(View.GONE);
-//        } else {
-//            noNotesView.setVisibility(View.VISIBLE);
-//        }
-//    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        return false;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -431,11 +360,11 @@ public class Medication extends Fragment implements SearchView.OnQueryTextListen
 
         // Generate random test data
         public ReminderItem generateDummyData() {
-            return new Medication.SimpleAdapter.ReminderItem("1", "2", "3", "4", "5", "6");
+            return new ReminderFragment.SimpleAdapter.ReminderItem("1", "2", "3", "4", "5", "6");
         }
 
         // Generate real data for each item
-        public List<Medication.SimpleAdapter.ReminderItem> generateData(int count) {
+        public List<ReminderFragment.SimpleAdapter.ReminderItem> generateData(int count) {
             ArrayList<ReminderItem> items = new ArrayList<>();
 
             // Get all reminders from the database
@@ -471,7 +400,7 @@ public class Medication extends Fragment implements SearchView.OnQueryTextListen
             }
 
             // Sort items according to date and time in ascending order
-            Collections.sort(DateTimeSortList, new Medication.SimpleAdapter.DateTimeComparator());
+            Collections.sort(DateTimeSortList, new ReminderFragment.SimpleAdapter.DateTimeComparator());
 
             int k = 0;
 
@@ -551,7 +480,15 @@ public class Medication extends Fragment implements SearchView.OnQueryTextListen
             // On clicking a reminder item
             @Override
             public void onClick(View v) {
-                //Do nothing
+                if (!mMultiSelector.tapSelection(this)) {
+                    mTempPost = mList.getChildAdapterPosition(v);
+
+                    int mReminderClickID = IDmap.get(mTempPost);
+                    selectReminder(mReminderClickID);
+
+                } else if (mMultiSelector.getSelectedPositions().isEmpty()) {
+                    mAdapter.setItemCount(getDefaultItemCount());
+                }
             }
 
             // On long press enter action mode with context menu

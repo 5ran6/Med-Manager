@@ -1,11 +1,15 @@
 package project.alc.com.med_manager.medication;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -126,13 +130,16 @@ public class DoctorInfo extends Fragment {
                 recyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, final int position) {
-//                Toast.makeText(getApplicationContext(), String.valueOf(position), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Calling Doctor..", Toast.LENGTH_SHORT).show();
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:" + doctorList.get(position).getPhone()));
 
-//                switch (position) {
-//                    case 1:
-//                        Toast.makeText(getApplicationContext(), "Hi", Toast.LENGTH_SHORT).show();
-//                        break;
-//                }
+                if (ActivityCompat.checkSelfPermission(getContext(),
+                        Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                startActivity(callIntent);
+
             }
 
             @Override
@@ -176,6 +183,14 @@ public class DoctorInfo extends Fragment {
                 if (which == 0) {
                     //   showNoteDialog(true, doctorList.get(position), position);
                     //call intent
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:" + doctorList.get(position).getPhone()));
+
+                    if (ActivityCompat.checkSelfPermission(getContext(),
+                            Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+                    startActivity(callIntent);
                 } else {
                     deleteNote(position);
                 }

@@ -29,6 +29,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import project.alc.com.med_manager.alarm.ReminderFragment;
 import project.alc.com.med_manager.database.DatabaseHelperProfile;
 import project.alc.com.med_manager.medication.DoctorInfo;
 import project.alc.com.med_manager.medication.Medications;
@@ -40,6 +41,7 @@ import project.alc.com.med_manager.reminder.Medication;
 public class HomeActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     public static DatabaseHelperProfile sQliteHelper;
     public boolean isFirstStart;
+    public ImageView curentCurrency;
     String name;
     String email;
     byte[] image;
@@ -51,7 +53,6 @@ public class HomeActivity extends AppCompatActivity implements SharedPreferences
     Fragment myFragment = (Fragment) fragmentClass.newInstance();
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
-    private ImageView curentCurrency;
     private TextView currentTextView;
 
     public HomeActivity() throws IllegalAccessException, InstantiationException {
@@ -87,6 +88,7 @@ public class HomeActivity extends AppCompatActivity implements SharedPreferences
         if (savedInstanceState != null) {
             //Restore the fragment's instance
             //       myFragment = getSupportFragmentManager().getFragment(savedInstanceState, myFragment.toString());
+
         }
 
         Thread t = new Thread(new Runnable() {
@@ -234,7 +236,7 @@ public class HomeActivity extends AppCompatActivity implements SharedPreferences
                 fragmentClass = Appointment.class;
                 break;
             case R.id.meds:
-                fragmentClass = Medications.class;
+                fragmentClass = ReminderFragment.class;
                 break;
             case R.id.doc:
                 fragmentClass = DoctorInfo.class;

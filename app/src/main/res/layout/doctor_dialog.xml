@@ -62,7 +62,7 @@
         android:background="@android:color/transparent"
         android:gravity="top"
         android:hint="@string/hint_enter_number"
-        android:inputType="number"
+        android:inputType="phone"
         android:lines="1"
         android:maxLength="13"
         android:textColor="@color/colorPrimaryDark"

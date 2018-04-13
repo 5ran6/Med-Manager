@@ -87,8 +87,12 @@ public class MyIntro extends AppIntro {
         // Do something here when users click or tap on Skip button.
 
         finish();
-//        Intent intent = new Intent(this, LoginActivity.class);
-//        startActivity(intent);
+
+//          MENU LOGIN
+//          send the intent extras to the HomeActivity for opening login Fragment
+//          Intent intent = new Intent(this, HomeActivity.class);
+//          startActivity(intent);
+
     }
 
     @Override

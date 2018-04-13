@@ -1,7 +1,7 @@
 package project.alc.com.med_manager.view;
 
 /**
- * Created by ravi on 20/02/18.
+ * Created by 5ran6 on 20/02/18.
  */
 
 import android.content.Context;
@@ -31,21 +31,6 @@ public class DrugsAdapter extends RecyclerView.Adapter<DrugsAdapter.MyViewHolder
     DrugsAdapter(List<Note> notesList) {
         this.notesList = notesList;
     }
-
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView note;
-        public TextView dose;
-        public TextView dot;
-        public TextView timestamp;
-
-        public MyViewHolder(View view) {
-            super(view);
-            note = (TextView) view.findViewById(R.id.note);
-            dot = (TextView) view.findViewById(R.id.dot);
-            timestamp = (TextView) view.findViewById(R.id.timestamp);
-        }
-    }
-
 
     public DrugsAdapter(Context context, List<Note> notesList) {
         this.context = context;
@@ -106,5 +91,19 @@ public class DrugsAdapter extends RecyclerView.Adapter<DrugsAdapter.MyViewHolder
         notesList = new ArrayList<>();
         notesList.addAll(newList);
         notifyDataSetChanged();
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        public TextView note;
+        public TextView dose;
+        public TextView dot;
+        public TextView timestamp;
+
+        public MyViewHolder(View view) {
+            super(view);
+            note = (TextView) view.findViewById(R.id.note);
+            dot = (TextView) view.findViewById(R.id.dot);
+            timestamp = (TextView) view.findViewById(R.id.timestamp);
+        }
     }
 }
