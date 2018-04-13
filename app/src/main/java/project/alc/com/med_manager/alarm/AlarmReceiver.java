@@ -156,9 +156,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                 mMediaPlayer.prepare();
                 mMediaPlayer.start();
                 Ringtone ringtone = RingtoneManager.getRingtone(context, alert);
-
                 ringtone.play();
-
 
             }
         } catch (IOException e) {
