@@ -36,7 +36,7 @@
             android:layout_marginLeft="72dp"
             android:layout_marginRight="16dp"
             android:gravity="top|left"
-            android:hint="@string/add_location_reminder"
+            android:hint="@string/add_reminder"
             android:inputType="textCapWords|textMultiLine"
             android:lines="3"
             android:minLines="4"
@@ -205,7 +205,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="16dp"
-                    android:checked="false"
+                    android:checked="true"
                     android:onClick="onSwitchRepeat"
                     android:textOff="Off"
                     android:textOn="On" />

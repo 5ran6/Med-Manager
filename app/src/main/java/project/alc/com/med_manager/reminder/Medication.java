@@ -182,7 +182,7 @@ public class Medication extends Fragment implements SearchView.OnQueryTextListen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        getActivity().setTitle("View");
+        getActivity().setTitle("View Meds");
 
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.activity_main_alarm, container, false);

@@ -94,6 +94,7 @@
     <string name="title_activity_licenses">Licenses</string>
 
     <string name="add_reminder">Drug: Description</string>
+    <string name="add_location_reminder">Location: Description</string>
     <string name="details">Details</string>
     <string name="date">Date</string>
     <string name="time">Time</string>

@@ -22,9 +22,6 @@ import project.alc.com.med_manager.R;
 import project.alc.com.med_manager.database.model.Note;
 
 public class DrugsAdapter extends RecyclerView.Adapter<DrugsAdapter.MyViewHolder> {
-//    ArrayList<Note> arrayList = new ArrayList<>();
-
-
     private Context context;
     private List<Note> notesList;
 

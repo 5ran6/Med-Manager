@@ -32,7 +32,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-auth:11.8.0'
     compile 'com.getbase:floatingactionbutton:1.9.0'
     compile 'com.wdullaer:materialdatetimepicker:1.2.1'
-    compile 'com.bignerdranch.android:recyclerview-multiselect:+'
+    compile 'com.bignerdranch.android:recyclerview-multiselect:0.2'
     compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.android.support:appcompat-v7:25.3.1'

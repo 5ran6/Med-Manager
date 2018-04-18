@@ -98,7 +98,7 @@ public class DoctorInfo extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        getActivity().setTitle("DoctorInfo");
+        getActivity().setTitle("Doctors Info");
         view = inflater.inflate(R.layout.fragment_doctor, container, false);
 
         coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinator_layout);

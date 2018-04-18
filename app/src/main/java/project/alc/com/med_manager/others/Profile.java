@@ -115,11 +115,10 @@ public class Profile extends Fragment implements View.OnClickListener, GoogleApi
         view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         sQliteHelper = new DatabaseHelperProfile(getContext(), "profile.sqlite", null, 1);
-//        sQliteHelper.onCreate("CREATE TABLE IF NOT EXISTS PROFILE (Id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR, email VARCHAR, image BLOB)");
+        //       sQliteHelper.onCreate("CREATE TABLE IF NOT EXISTS PROFILE (Id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR, email VARCHAR, image BLOB)");
 
         profile_section = (LinearLayout) view.findViewById(R.id.profile_section);
-
-        currentTextView = (TextView) getActivity().findViewById(R.id.name);
+        currentTextView = (TextView) getActivity().findViewById(R.id.currentText);
 
         name = (TextView) view.findViewById(R.id.name);
         email = (TextView) view.findViewById(R.id.email);
@@ -176,7 +175,7 @@ public class Profile extends Fragment implements View.OnClickListener, GoogleApi
 
                         //set the profile picture
                         profile.setImageBitmap(bitmap);
-                        currentTextView.setText(name + "\n" + email);
+                        currentTextView.setText(Name + "\n" + Email);
 
                         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
