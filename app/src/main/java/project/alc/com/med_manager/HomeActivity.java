@@ -32,10 +32,8 @@ import android.widget.TextView;
 import project.alc.com.med_manager.alarm.ReminderFragment;
 import project.alc.com.med_manager.database.DatabaseHelperProfile;
 import project.alc.com.med_manager.medication.DoctorInfo;
-import project.alc.com.med_manager.medication.Medications;
 import project.alc.com.med_manager.others.About;
 import project.alc.com.med_manager.others.Profile;
-import project.alc.com.med_manager.reminder.Appointment;
 import project.alc.com.med_manager.reminder.Medication;
 
 public class HomeActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -232,9 +230,7 @@ public class HomeActivity extends AppCompatActivity implements SharedPreferences
             case R.id.med:
                 fragmentClass = Medication.class;
                 break;
-            case R.id.doc_app:
-                fragmentClass = Appointment.class;
-                break;
+
             case R.id.meds:
                 fragmentClass = ReminderFragment.class;
                 break;

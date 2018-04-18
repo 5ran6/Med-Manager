@@ -12,11 +12,7 @@
                 android:icon="@drawable/ic_local_hospital_black_24dp"
                 android:orderInCategory="1"
                 android:title="@string/meds" />
-            <item
-                android:id="@+id/doc_app"
-                android:icon="@drawable/ic_remove_red_eye_black_24dp"
-                android:orderInCategory="2"
-                android:title="@string/doc_app" />
+
         </menu>
     </item>
     <item android:title="@string/section2">
