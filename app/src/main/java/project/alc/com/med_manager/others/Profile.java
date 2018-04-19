@@ -183,7 +183,7 @@ public class Profile extends Fragment implements View.OnClickListener, GoogleApi
 
                         //add to database
                         sQliteHelper.insertData(Name.toString(), Email.toString(), imageInByte);
-                        Toast.makeText(getContext(), "Added to db successfully!", Toast.LENGTH_SHORT).show();
+                        //     Toast.makeText(getContext(), "Added to db successfully!", Toast.LENGTH_SHORT).show();
                     }
                 });
                 name.setText(Name);
@@ -219,7 +219,7 @@ public class Profile extends Fragment implements View.OnClickListener, GoogleApi
             profile_section.setVisibility(View.GONE);
             SignIn.setVisibility(View.VISIBLE);
             sQliteHelper.deleteAll();
-            Toast.makeText(getContext(), "Dropped Table successfully!", Toast.LENGTH_SHORT).show();
+            //  Toast.makeText(getContext(), "Dropped Table successfully!", Toast.LENGTH_SHORT).show();
 
         }
 
