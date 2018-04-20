@@ -36,7 +36,8 @@
     <string name="intro_2_header">Medication Reminder</string>
     <string name="intro_3_header">Doctor\'s Appointment</string>
 
-    <string name="home">Welcome. \n Switch between the different tabs on the Navigation Bar for different functions</string>
+    <string name="home">Home</string>
+    <string name="home_">Welcome. \n Switch between the different tabs on the Navigation Bar for different functions</string>
     <string name="section1">Reminders</string>
     <string name="section2">Medications</string>
     <string name="about_app">THIS IS A DEMO APP THAT REMINDS PATIENTS TO TAKE THEIR MEDDICATIONS AND NOT MISS AN APPOINTMENT WITH THE DOCTOR.\n FOUND ON MY GITHUB REPO @5ran6/Med-Manager</string>

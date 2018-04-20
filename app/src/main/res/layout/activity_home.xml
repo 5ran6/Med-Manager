@@ -29,7 +29,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight=".8"
                 android:gravity="center"
-                android:text="@string/home"
+                android:text="@string/home_"
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/activity_horizontal_margin"
                 android:textStyle="bold|italic" />
