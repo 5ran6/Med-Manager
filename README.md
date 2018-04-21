@@ -4,4 +4,4 @@ A demo app for reminding patients take their medications and their appointments 
 ## UI
 The UI test is written with Espresso
 
-> The final apk can be download here : <insert link>
+> The final apk can be download here : <https://drive.google.com/file/d/1FKTsb4jquwC5VCKXIfvYtinLGBFeId9r/view?usp=sharing>
