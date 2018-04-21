@@ -67,6 +67,7 @@ public class Home extends Fragment {
 
         // Inflate the layout for this fragment
         getActivity().setTitle("Home");
+        view = inflater.inflate(R.layout.activity_home, container, false);
         return view;
     }
 
