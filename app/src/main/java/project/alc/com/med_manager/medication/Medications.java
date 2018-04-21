@@ -91,6 +91,9 @@ public class Medications extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (container != null) {
+            container.removeAllViews();
+        }
         // Inflate the layout for this fragment
         getActivity().setTitle("Add/View/Edit Meds");
 

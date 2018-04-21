@@ -97,6 +97,9 @@ public class DoctorInfo extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (container != null) {
+            container.removeAllViews();
+        }
         // Inflate the layout for this fragment
         getActivity().setTitle("Doctors Info");
         view = inflater.inflate(R.layout.fragment_doctor, container, false);

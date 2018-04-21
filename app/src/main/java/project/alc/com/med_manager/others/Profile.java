@@ -110,6 +110,9 @@ public class Profile extends Fragment implements View.OnClickListener, GoogleApi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (container != null) {
+            container.removeAllViews();
+        }
         // Inflate the layout for this fragment
         getActivity().setTitle("Profile");
         view = inflater.inflate(R.layout.fragment_profile, container, false);

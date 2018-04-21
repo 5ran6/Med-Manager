@@ -269,4 +269,3 @@ public class HomeActivity extends AppCompatActivity implements SharedPreferences
         return super.onOptionsItemSelected(item);
     }
 }
-
